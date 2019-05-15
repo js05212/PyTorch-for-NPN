@@ -55,7 +55,7 @@ Regression task on Boston Housing:
 * For regression tasks (Boston Housing) using MLP, run the command: 'sh regress_mlp.sh'
 
 ## Short code example:
-
+This is *everything* to implement a three-layer NPN on PyTorch (essentially only need to replace nn.Linear with NPNLinear):
 ```python
 from npn import NPNLinear
 from npn import NPNSigmoid
@@ -84,6 +84,10 @@ class NPNNet(nn.Module):
 ## Install:
 
 The code is tested under PyTorch 0.2.03 and Python 3.5.2.
+
+## Official Matlab implementation:
+
+The official Matlab version (with GPU support) can be found [here](https://github.com/js05212/NPN)
 
 ## Other implementations (third-party):
 
