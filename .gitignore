@@ -1,0 +1,14 @@
+tmp*
+*~
+__pycache__
+*.model
+*.pyc
+*.py_*
+*.sh_*
+README
+hao-att.sh
+cp.sh
+weight_info*
+main_npn.py
+main.py
+npn_example.py
