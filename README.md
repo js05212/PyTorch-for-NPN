@@ -5,6 +5,8 @@ This is the PyTorch code for the NIPS paper ['Natural-Parameter Networks: A Clas
 
 It is a class of probabilistic neural networks that treat both weights and neurons as distributions rather than just points in high-dimensional space. Distributions are first-citizens in the networks. The design allows distributions to feedforward and backprop across the network. Given an input data point, NPN will output a predicted distribution with information on both the prediction and uncertainty.
 
+NPN can be used either independently or as a building block for [Bayesian Deep Learning](http://wanghao.in/paper/TKDE16_BDL.pdf) (BDL).
+
 Note that this is the code for Gaussian NPN to run on the MNIST and Boston
 Housing datasets. For Gamma NPN or Poisson NPN please go to the other repo.
 
