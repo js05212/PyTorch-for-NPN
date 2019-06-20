@@ -10,6 +10,20 @@ NPN can be used either independently or as a building block for [Bayesian Deep L
 Note that this is the code for Gaussian NPN to run on the MNIST and Boston
 Housing datasets. For Gamma NPN or Poisson NPN please go to the other repo.
 
+## Neural networks v.s. natural-parameter-networks in two figures:
+
+### Distributions as first-class citizens:
+
+<p align="center">
+<img src="./figures/nn-vs-npn.png" alt="" data-canonical-src="./figures/nn-vs-npn.png" width="600" height="270"/>
+</p>
+
+### Closed-form operations to handle uncertainty:
+
+<p align="center">
+<img src="./figures/nn-vs-npn-op.png" alt="" data-canonical-src="./figures/nn-vs-npn-op.png" width="730" height="380"/>
+</p>
+
 ## Example results on uncertainty-aware prediction:
 ### Output both prediction and uncertainty for regression:
 <p align="center">
