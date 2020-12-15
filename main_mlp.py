@@ -310,13 +310,15 @@ def train(epoch):
             elif args.loss == 'mse':
                 loss = mse(output, target)
             # TODO: use BCELoss
-        sum_loss += loss.data[0]
+        #sum_loss += loss.data[0]
+        sum_loss += loss.item()
         loss.backward()
         optimizer.step()
         if batch_idx % args.log_interval == 0 and batch_idx != 0:
             log_txt = 'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.7f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.data[0])
+                100. * batch_idx / len(train_loader), loss.item())
+                #100. * batch_idx / len(train_loader), loss.data[0])
             print(log_txt)
             plain_log(args.log_file,log_txt+'\n')
     avg_loss = sum_loss / len(train_loader.dataset) * args.batch_size
@@ -351,19 +353,19 @@ def test():
                 output, s = output
             #test_loss += F.nll_loss(torch.log(output+1e-10), target, size_average=False).data[0] # sum up batch loss
             if args.loss == 'default':
-                test_loss += (bce(output, target_ex) + args.output_s * torch.sum(s ** 2)).data[0]
+                test_loss += (bce(output, target_ex) + args.output_s * torch.sum(s ** 2)).item()
             elif args.loss == 'npnbce':
-                test_loss += (NPNBCELoss(output, s, target_ex) + args.output_s * torch.sum(s ** 2)).data[0]
+                test_loss += (NPNBCELoss(output, s, target_ex) + args.output_s * torch.sum(s ** 2)).item()
             elif args.loss == 'kl':
-                test_loss += (KL_BG(output, s, target_ex) + args.output_s * torch.sum(s ** 2)).data[0]
+                test_loss += (KL_BG(output, s, target_ex) + args.output_s * torch.sum(s ** 2)).item()
             elif args.loss == 'gaussian':
-                test_loss += KL_loss((output, s), target).data[0]
-                rmse_loss += RMSE(output, target).data[0]
+                test_loss += KL_loss((output, s), target).item()
+                rmse_loss += RMSE(output, target).item()
             elif args.loss == 'mse':
-                test_loss += mse(output, target).data[0]
-                rmse_loss += RMSE(output, target).data[0]
+                test_loss += mse(output, target).item()
+                rmse_loss += RMSE(output, target).item()
         else:
-            test_loss += F.nll_loss(output, target, size_average=False).data[0] # sum up batch loss
+            test_loss += F.nll_loss(output, target, size_average=False).item() # sum up batch loss
         if not args.type.startswith('regress_'):
             pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).cpu().sum()
