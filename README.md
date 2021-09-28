@@ -27,7 +27,7 @@ Housing datasets. For Gamma NPN or Poisson NPN please go to the other repo.
 ## Example results on uncertainty-aware prediction:
 ### Output both prediction and uncertainty for regression:
 <p align="center">
-<img src="./figures/NPN.jpg" alt="" data-canonical-src="./figures/NPN.jpg" width="520" height="400"/>
+<img src="./figures/NPN.jpg" alt="" data-canonical-src="./figures/NPN.jpg" width="420" height="300"/>
 </p>
 Above is the predictive distribution for NPN. The shaded regions correspond
 to 3 standard deviations. The black curve is the data-generating function and blue curves
@@ -35,7 +35,7 @@ show the mean of the predictive distributions. Red stars are the training data.
 
 ### Accuracy versus uncertainty (variance):
 <p align="center">
-<img src="./figures/acc-var-MNIST.jpg" alt="" data-canonical-src="./figures/NPN.jpg" width="520" height="400"/>
+<img src="./figures/acc-var-MNIST.jpg" alt="" data-canonical-src="./figures/NPN.jpg" width="420" height="300"/>
 </p>
 Above is the classification accuracy for different variance (uncertainty). Note that ‘1’ in the x-axis means the variance is in the range [0, 0.04), ‘2’ means the variance is in the range [0.04, 0.08), etc.
 
