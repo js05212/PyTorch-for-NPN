@@ -11,6 +11,8 @@ from torchvision import datasets, transforms
 from torch.autograd import Variable
 from utils import plain_log
 from npn import NPNLinear
+from npn import Linear2Branch
+from npn import NPNLinearLite
 from npn import NPNSigmoid
 from npn import NPNRelu
 from npn import NPNDropout
@@ -172,6 +174,35 @@ class NPNNet(nn.Module):
         x, s = self.sigmoid3(self.fc3(x))
         return x, s
 
+class NPNNetLite(nn.Module):
+    def __init__(self):
+        super(NPNNetLite, self).__init__()
+        self.dropout = args.dropout
+
+        self.fc1 = Linear2Branch(784, 800, False)
+        self.sigmoid1 = NPNSigmoid()
+        #self.sigmoid1 = NPNRelu()
+        self.fc2 = NPNLinearLite(800, 800)
+        self.sigmoid2 = NPNSigmoid()
+        #self.sigmoid2 = NPNRelu()
+        self.fc3 = NPNLinearLite(800, 10)
+        self.sigmoid3 = NPNSigmoid()
+
+        self.drop1 = NPNDropout(self.dropout)
+        self.drop2 = NPNDropout(self.dropout)
+        self.drop3 = NPNDropout(self.dropout)
+
+    def forward(self, x):
+        x = x.view(-1, 784)
+        x = self.fc1(x)
+        x = self.sigmoid1(x)
+        x = self.drop1(x)
+        x = self.fc2(x)
+        x = self.sigmoid2(x)
+        x = self.drop2(x)
+        x, s = self.sigmoid3(self.fc3(x))
+        return x, s
+
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
@@ -255,6 +286,8 @@ if args.type == 'mlp':
     model = Net()
 elif args.type == 'npn':
     model = NPNNet()
+elif args.type == 'npn_lite':
+    model = NPNNetLite()
 elif args.type == 'cnn':
     model = CNN()
 elif args.type == 'npncnn':
@@ -283,7 +316,7 @@ def train(epoch):
             target_ex = torch.zeros(target.size()[0], 10)
             target_ex[ind[:min(args.batch_size, target.size()[0])], target] = 1
 
-        if args.type == 'npn' or args.type == 'npncnn':
+        if args.type == 'npn' or args.type == 'npncnn' or args.type == 'npn_lite':
             target = target_ex
         if args.cuda:
             data, target = data.cuda(), target.cuda()
@@ -348,7 +381,7 @@ def test():
         else:
             data, target = Variable(data, volatile=True), Variable(target)
         output = model(data)
-        if args.type == 'npn' or args.type == 'npncnn' or args.type.startswith('regress_'):
+        if args.type == 'npn' or args.type == 'npncnn' or args.type == 'npn_lite' or args.type.startswith('regress_'):
             if args.type != 'regress_mlp':
                 output, s = output
             #test_loss += F.nll_loss(torch.log(output+1e-10), target, size_average=False).data[0] # sum up batch loss

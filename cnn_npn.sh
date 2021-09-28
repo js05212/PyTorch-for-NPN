@@ -13,7 +13,7 @@ save_interval='100'
 batch_size='128'
 log_file='tmp_mlp'
 seed='2'
-CUDA_VISIBLE_DEVICES=$gpuid python3.5 main_mlp.py \
+CUDA_VISIBLE_DEVICES=$gpuid python main_mlp.py \
     --lr $lr \
     --epochs $epo \
     --num_train $num_train \

@@ -78,6 +78,60 @@ class NPNLinear(nn.Module):
         return o_m, o_s
 
 
+class NPNLinearLite(nn.Module):
+    def __init__(self, in_channels, out_channels, dual_input = True, init_type = 0):
+        super(NPNLinearLite, self).__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.dual_input = dual_input
+
+        self.W_m = nn.Parameter(2 * math.sqrt(6) / math.sqrt(in_channels + out_channels) * (torch.rand(in_channels, out_channels) - 0.5))
+        self.bias_m = nn.Parameter(torch.zeros(out_channels))
+
+    def forward(self, x):
+        if self.dual_input:
+            x_m, x_s = x
+        else:
+            x_m = x
+            x_s = x.clone()
+            x_s = 0 * x_s
+
+        o_m = torch.mm(x_m, self.W_m)
+        o_m = o_m + self.bias_m.expand_as(o_m)
+
+        o_s = torch.mm(x_s, self.W_m * self.W_m)
+
+        return o_m, o_s
+
+class Linear2Branch(nn.Module):
+    def __init__(self, in_channels, out_channels, dual_input = True, init_type = 0):
+        super(Linear2Branch, self).__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.dual_input = dual_input
+
+        self.W_m = nn.Parameter(2 * math.sqrt(6) / math.sqrt(in_channels + out_channels) * (torch.rand(in_channels, out_channels) - 0.5))
+        self.W_s = nn.Parameter(2 * math.sqrt(6) / math.sqrt(in_channels + out_channels) * (torch.rand(in_channels, out_channels) - 0.5))
+
+        self.bias_m = nn.Parameter(torch.zeros(out_channels))
+        self.bias_s = nn.Parameter(torch.zeros(out_channels))
+
+    def forward(self, x):
+        if self.dual_input:
+            x_m, x_s = x
+        else:
+            x_m = x
+            x_s = x
+
+        o_m = torch.mm(x_m, self.W_m)
+        o_m = o_m + self.bias_m.expand_as(o_m)
+
+        o_s = torch.mm(x_s, self.W_s)
+        o_s = o_s + self.bias_s.expand_as(o_s)
+        o_s = o_s.exp()
+
+        return o_m, o_s
+
 class NPNRelu(nn.Module):
     def __init__(self):
         super(NPNRelu, self).__init__()
